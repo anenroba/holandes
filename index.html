@@ -151,35 +151,30 @@
             }
             // --- FIN: VALIDACIÓN DE CAMPOS ---
 
+            // Obtener la fecha y hora actual automáticamente
+            const now = new Date();
+            const fechaHoraRegistro = now.toLocaleString('es-CL', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false // Formato 24 horas
+            });
+
             // Si todas las validaciones pasan, preparar los datos para enviar
             const formData = {
                 nombre: nombre,
                 apellido: apellido,
                 rut: rut,
-                edad: edadNum
+                edad: edadNum,
+                fechaRegistro: fechaHoraRegistro // Añadimos la fecha y hora aquí
             };
 
             // --- INICIO: INTEGRACIÓN CON GOOGLE APPS SCRIPT ---
-            // IMPORTANTE: Reemplaza 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL' con la URL real de tu Web App de Google Apps Script.
-            // Para obtener esta URL:
-            // 1. Abre tu Google Sheet donde quieres guardar los datos.
-            // 2. Ve a 'Extensiones' > 'Apps Script'.
-            // 3. Pega el código de Apps Script (ver ejemplo más abajo) en el editor.
-            // 4. Guarda el proyecto (icono del disquete).
-            // 5. Haz clic en 'Desplegar' > 'Nueva implementación'.
-            // 6. Selecciona 'Tipo de implementación': 'Aplicación web'.
-            // 7. Configura 'Ejecutar como': 'Yo' (tu cuenta de Google).
-            // 8. Configura 'Quién tiene acceso': 'Cualquier persona' (o 'Cualquier persona, incluso anónima' si no requieres autenticación).
-            // 9. Haz clic en 'Desplegar' y copia la 'URL de la aplicación web'.
-
-            const googleAppsScriptURL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL'; // ¡REEMPLAZA ESTO CON TU URL REAL!
-
-            // Verificar si la URL ha sido configurada
-            if (googleAppsScriptURL === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL') {
-                messageArea.textContent = 'Error: Por favor, configura la URL de tu Google Apps Script en el código.';
-                messageArea.classList.add('text-red-400');
-                return;
-            }
+            // URL de tu Web App de Google Apps Script
+            const googleAppsScriptURL = 'https://script.google.com/macros/s/AKfycbxpTYRHAsE9uf1yUPeiB5BTz02CI1BNx36025VmVve7jLlRYORD8AzAHPOFbfUJcZZ1aA/exec';
 
             // Mostrar mensaje de envío
             messageArea.textContent = 'Enviando datos... Por favor, espera.';
