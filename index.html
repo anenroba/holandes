@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Pasajero</title>
+    <!-- Enlace al CDN de Tailwind CSS para un diseño responsivo y moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuración de Tailwind CSS para usar la fuente Inter -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Fondo degradado de gris oscuro a un tono más oscuro */
+            background: linear-gradient(to bottom right, #374151, #1F2937);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-700">
+        <!-- Sección del Logo -->
+        <div class="mb-8 text-center">
+            <!--
+                IMPORTANTE: Coloca tu imagen de logo cuadrada en la carpeta 'images'
+                de tu proyecto (ej: 'images/logo.png').
+                He añadido clases para asegurar que sea cuadrada (w-24 h-24) y tenga bordes redondeados.
+            -->
+            <img src="images/logo.png"
+                 alt="Logo de la Empresa"
+                 class="mx-auto w-24 h-24 object-cover rounded-full border-2 border-blue-500 shadow-lg"
+                 onerror="this.onerror=null;this.src='https://placehold.co/96x96/4B5563/D1D5DB?text=Logo';"
+            >
+            <h2 class="mt-6 text-3xl font-extrabold text-white">
+                Registro de Pasajero
+            </h2>
+            <p class="mt-2 text-sm text-gray-300">
+                Por favor, completa tus datos para registrarte como pasajero.
+            </p>
+        </div>
+
+        <!-- Formulario de Registro -->
+        <form class="space-y-6" id="passengerForm">
+            <!-- Campo Nombre -->
+            <div>
+                <label for="nombre" class="block text-sm font-medium text-gray-200">
+                    Nombre
+                </label>
+                <div class="mt-1">
+                    <input id="nombre" name="nombre" type="text" autocomplete="given-name" required
+                           class="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-700 text-white"
+                           placeholder="Ingresa tu nombre"
+                    >
+                </div>
+            </div>
+
+            <!-- Campo Apellido -->
+            <div>
+                <label for="apellido" class="block text-sm font-medium text-gray-200">
+                    Apellido
+                </label>
+                <div class="mt-1">
+                    <input id="apellido" name="apellido" type="text" autocomplete="family-name" required
+                           class="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-700 text-white"
+                           placeholder="Ingresa tu apellido"
+                    >
+                </div>
+            </div>
+
+            <!-- Campo RUT (Chile) -->
+            <div>
+                <label for="rut" class="block text-sm font-medium text-gray-200">
+                    RUT
+                </label>
+                <div class="mt-1">
+                    <input id="rut" name="rut" type="text" autocomplete="off" required
+                           pattern="^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$"
+                           title="Formato: XX.XXX.XXX-X o X.XXX.XXX-X"
+                           class="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-700 text-white"
+                           placeholder="Ej: 12.345.678-9"
+                    >
+                </div>
+                <p class="mt-2 text-xs text-gray-400">
+                    Formato: XX.XXX.XXX-X (ej: 12.345.678-9)
+                </p>
+            </div>
+
+            <!-- Campo Edad -->
+            <div>
+                <label for="edad" class="block text-sm font-medium text-gray-200">
+                    Edad
+                </label>
+                <div class="mt-1">
+                    <input id="edad" name="edad" type="number" autocomplete="off" required min="0" max="120"
+                           class="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-700 text-white"
+                           placeholder="Ingresa tu edad"
+                    >
+                </div>
+            </div>
+
+            <!-- Área de mensajes de validación/éxito -->
+            <div id="message-area" class="text-center text-sm font-medium"></div>
+
+            <!-- Botón de Envío -->
+            <div>
+                <button type="submit"
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                    Registrar Pasajero
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Añade un 'event listener' al formulario para interceptar el envío
+        document.getElementById('passengerForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita que el formulario se envíe de la forma tradicional
+
+            // Obtener los valores de los campos y eliminar espacios en blanco al inicio/final
+            const nombre = document.getElementById('nombre').value.trim();
+            const apellido = document.getElementById('apellido').value.trim();
+            const rut = document.getElementById('rut').value.trim();
+            const edad = document.getElementById('edad').value.trim();
+            const messageArea = document.getElementById('message-area');
+
+            // Limpiar cualquier mensaje anterior y resetear sus clases
+            messageArea.textContent = '';
+            messageArea.className = 'text-center text-sm font-medium';
+
+            // --- INICIO: VALIDACIÓN DE CAMPOS ---
+            // Validar que todos los campos obligatorios estén llenos
+            if (!nombre || !apellido || !rut || !edad) {
+                messageArea.textContent = 'Por favor, completa todos los campos obligatorios.';
+                messageArea.classList.add('text-red-400'); // Muestra el mensaje en rojo
+                return; // Detiene la ejecución si hay campos vacíos
+            }
+
+            // Validar formato de RUT (expresión regular para formato chileno)
+            const rutPattern = /^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$/;
+            if (!rutPattern.test(rut)) {
+                messageArea.textContent = 'Formato de RUT inválido. Ej: 12.345.678-9';
+                messageArea.classList.add('text-red-400');
+                return;
+            }
+
+            // Validar que la edad sea un número válido y dentro de un rango razonable
+            const edadNum = parseInt(edad, 10);
+            if (isNaN(edadNum) || edadNum < 0 || edadNum > 120) {
+                messageArea.textContent = 'La edad debe ser un número válido entre 0 y 120.';
+                messageArea.classList.add('text-red-400');
+                return;
+            }
+            // --- FIN: VALIDACIÓN DE CAMPOS ---
+
+            // Si todas las validaciones pasan, preparar los datos para enviar
+            const formData = {
+                nombre: nombre,
+                apellido: apellido,
+                rut: rut,
+                edad: edadNum
+            };
+
+            // --- INICIO: INTEGRACIÓN CON GOOGLE APPS SCRIPT ---
+            // IMPORTANTE: Reemplaza 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL' con la URL real de tu Web App de Google Apps Script.
+            // Para obtener esta URL:
+            // 1. Abre tu Google Sheet donde quieres guardar los datos.
+            // 2. Ve a 'Extensiones' > 'Apps Script'.
+            // 3. Pega el código de Apps Script (ver ejemplo más abajo) en el editor.
+            // 4. Guarda el proyecto (icono del disquete).
+            // 5. Haz clic en 'Desplegar' > 'Nueva implementación'.
+            // 6. Selecciona 'Tipo de implementación': 'Aplicación web'.
+            // 7. Configura 'Ejecutar como': 'Yo' (tu cuenta de Google).
+            // 8. Configura 'Quién tiene acceso': 'Cualquier persona' (o 'Cualquier persona, incluso anónima' si no requieres autenticación).
+            // 9. Haz clic en 'Desplegar' y copia la 'URL de la aplicación web'.
+
+            const googleAppsScriptURL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL'; // ¡REEMPLAZA ESTO CON TU URL REAL!
+
+            // Verificar si la URL ha sido configurada
+            if (googleAppsScriptURL === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL') {
+                messageArea.textContent = 'Error: Por favor, configura la URL de tu Google Apps Script en el código.';
+                messageArea.classList.add('text-red-400');
+                return;
+            }
+
+            // Mostrar mensaje de envío
+            messageArea.textContent = 'Enviando datos... Por favor, espera.';
+            messageArea.classList.add('text-blue-400');
+
+            // Enviar los datos a Google Apps Script usando fetch
+            fetch(googleAppsScriptURL, {
+                method: 'POST',
+                mode: 'no-cors', // 'no-cors' es necesario para evitar problemas de CORS con Apps Script
+                cache: 'no-cache',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                // Con 'no-cors', no podemos leer la respuesta directamente, pero asumimos éxito si no hay un error de red.
+                messageArea.textContent = '¡Registro de pasajero exitoso! 🎉';
+                messageArea.classList.add('text-green-400');
+                document.getElementById('passengerForm').reset(); // Limpiar el formulario después del envío exitoso
+            })
+            .catch(error => {
+                console.error('Error al enviar los datos:', error);
+                messageArea.textContent = 'Error al registrar el pasajero. Inténtalo de nuevo.';
+                messageArea.classList.add('text-red-400');
+            });
+            // --- FIN: INTEGRACIÓN CON GOOGLE APPS SCRIPT ---
+        });
+    </script>
+</body>
+</html>
