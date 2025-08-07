@@ -72,14 +72,14 @@
                 </label>
                 <div class="mt-1">
                     <input id="rut" name="rut" type="text" autocomplete="off" required
-                           pattern="^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$"
-                           title="Formato: XX.XXX.XXX-X o X.XXX.XXX-X"
+                           pattern="^\d{7,8}[-][0-9kK]{1}$"
+                           title="Formato: XXXXXXXX-X o XXXXXXX-X (sin puntos)"
                            class="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-700 text-white"
-                           placeholder="Ej: 12.345.678-9"
+                           placeholder="Ej: 12345678-9"
                     >
                 </div>
                 <p class="mt-2 text-xs text-gray-400">
-                    Formato: XX.XXX.XXX-X (ej: 12.345.678-9)
+                    Formato: XXXXXXXX-X (ej: 12345678-9)
                 </p>
             </div>
 
@@ -134,10 +134,10 @@
                 return; // Detiene la ejecución si hay campos vacíos
             }
 
-            // Validar formato de RUT (expresión regular para formato chileno)
-            const rutPattern = /^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$/;
+            // Validar formato de RUT (expresión regular para formato chileno sin puntos)
+            const rutPattern = /^\d{7,8}[-][0-9kK]{1}$/; // Acepta 7 u 8 dígitos, guion y dígito verificador
             if (!rutPattern.test(rut)) {
-                messageArea.textContent = 'Formato de RUT inválido. Ej: 12.345.678-9';
+                messageArea.textContent = 'Formato de RUT inválido. Ej: 12345678-9 (sin puntos)';
                 messageArea.classList.add('text-red-400');
                 return;
             }
